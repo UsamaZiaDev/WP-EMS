@@ -33,7 +33,6 @@ function ems_add_admin_menu(){
     );
 
     add_submenu_page( "employee-system", "List Employee", "List Employee", "manage_options", "employee-system", "ems_crud_system");
-
     add_submenu_page( "employee-system", "Add Employee", "Add Employee", "manage_options", "add-employee", "ems_add_employee");
 }
 add_action("admin_menu", "ems_add_admin_menu");
@@ -45,3 +44,32 @@ function ems_crud_system(){
 function ems_add_employee(){
     require_once(EMP_PLUGIN_PATH."pages/add-employee.php");
 }
+
+
+function ems_create_table(){
+
+    global $wpdb;
+    $tablePrefix = $wpdb->prefix;
+    
+    $sqlQuery =  "CREATE TABLE `{$tablePrefix}ems_form_data` (
+                    `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                    `name` varchar(50) NULL,
+                    `email` varchar(50) NULL,
+                    `phone` int(15) NULL,
+                    `gender` enum('male','female','other') NULL,
+                    `designation` varchar(50) NULL
+                )";
+
+    include_once ABSPATH . "wp-admin/includes/upgrade.php";
+    dbDelta($sqlQuery);
+}
+register_activation_hook(__FILE__, "ems_create_table");
+
+
+function ems_drop_table(){
+    global $wpdb;
+    $tablePrefix = $wpdb -> prefix;
+    $sqlQuery = "DROP TABLE  IF EXISTS {$tablePrefix}ems_form_data";
+    $wpdb -> query($sqlQuery);
+}
+register_deactivation_hook(__FILE__, "ems_drop_table");

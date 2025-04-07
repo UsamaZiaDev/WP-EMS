@@ -1,3 +1,8 @@
+<?php
+    global $wpdb;
+
+    $employees =  $wpdb -> get_results("SELECT * FROM {$wpdb->prefix}ems_form_data ");
+?>
 
 <div class="row mt-4">
     <div class="col-lg-10">
@@ -19,54 +24,24 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <th >1</th>
-                        <td>Zain</td>
-                        <td>Zain123@gmail.com</td>
-                        <td>Male</td>
-                        <td>DHMS</td>
-                        <td>
-                            <a href="#" class="btn btn-info"> View </a>
-                            <a href="#" class="btn btn-warning"> Edit </a>
-                            <a href="#" class="btn btn-danger"> Delete </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th >1</th>
-                        <td>safi</td>
-                        <td>safi123@gmail.com</td>
-                        <td>Male</td>
-                        <td>php dev</td>
-                        <td>
-                            <a href="#" class="btn btn-info"> View </a>
-                            <a href="#" class="btn btn-warning"> Edit </a>
-                            <a href="#" class="btn btn-danger"> Delete </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th >1</th>
-                        <td>usama</td>
-                        <td>usama123@gmail.com</td>
-                        <td>Male</td>
-                        <td>WP dev</td>
-                        <td>
-                            <a href="#" class="btn btn-info"> View </a>
-                            <a href="#" class="btn btn-warning"> Edit </a>
-                            <a href="#" class="btn btn-danger"> Delete </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th >1</th>
-                        <td>ans</td>
-                        <td>ans123@gmail.com</td>
-                        <td>Male</td>
-                        <td>Digital Eng</td>
-                        <td>
-                            <a href="#" class="btn btn-info"> View </a>
-                            <a href="#" class="btn btn-warning"> Edit </a>
-                            <a href="#" class="btn btn-danger"> Delete </a>
-                        </td>
-                    </tr>
+                    <?php
+                        if(count($employees) > 0 ){
+                            foreach($employees as $data){  ?>    
+                                <tr>
+                                    <td> <?php echo $data -> id ?> </td>
+                                    <td> <?php echo $data -> name ?> </td>
+                                    <td> <?php echo $data -> email ?> </td>
+                                    <td> <?php echo $data -> gender ?> </td>
+                                    <td> <?php echo $data -> designation ?> </td>
+                                    <td>
+                                        <a href="admin.php?page=add-employee&action=view&empId=<?php echo $data -> id ?>" class="btn btn-info"> View </a>
+                                        <a href="admin.php?page=add-employee&action=edit&empId=<?php echo $data -> id ?>" onClick="" class="btn btn-warning"> Edit </a>
+                                        <a href="admin.php?page=employee-system&action=delete&empId=<?php echo $data -> id ?>" class="btn btn-danger"> Delete </a>
+                                    </td>
+                                </tr> 
+                    <?php }}else{
+                        echo "<tr><td><h4> No Employee found </h4></td></tr>";
+                    } ?>
                 </tbody>
                 </table>
             </div>
